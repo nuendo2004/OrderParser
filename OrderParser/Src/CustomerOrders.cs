@@ -64,7 +64,7 @@ namespace OrderParser.Src
                     {
                         ParseDetail(currentLine, currentLineNumber, currentOrder);
                         currentLine = sr.ReadLine();
-                        if (currentLine == null || currentLine[0] != '3')
+                        if ((currentLine == null || currentLine[0] != '3') && currentOrder.ErrorMessage.Length == 0)
                         {
                             
                             if (_OrderData.ContainsKey(currentOrder.Id))
@@ -96,12 +96,6 @@ namespace OrderParser.Src
                     OnSendMessage(ex.Message);
                     break;
                 }
-            }
-            if (!_OrderData.ContainsKey(currentOrder.Id))
-            {
-                _OrderData.Add(currentOrder.Id, currentOrder);
-                currentOrder.IsValid = true;
-                orderAdded++;
             }
             sr.Close();
             OnJobFinished($"Read {totalOrderRead} order, successfully added {orderAdded} record, {failedOrders} faild.", _OrderData);
